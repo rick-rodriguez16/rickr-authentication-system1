@@ -73,14 +73,19 @@ def register_user():
 @api.route('/invoice', methods=['GET'])
 @jwt_required()
 def get_invoices():
-    # Access the identity of the current user with get_jwt_identity
+    # access the user_id of the current user with the access_token
+    # you do that with get_jwt_identity
     user_id = get_jwt_identity()
-    #return jsonify(logged_in_as=user_id), 200
 
     user = User.query.filter_by(id = user_id).first()
+
+    # query and retrieve any and all invoices that are in the DB
     user_invoices = Invoice.query.filter_by(user_id=user_id).all()
 
     # we need to serialize the invoice objects and put them in an array
+    # use a list comprehension (for loop) that will:
+    # 1. Get each Invoice object and serialize() it
+    # 2. Put them in the processed_invoices array
     processed_invoices = [each_invoice.serialize() for each_invoice in user_invoices]
 
     if user_invoices is None or len(user_invoices) == 0:
@@ -92,8 +97,7 @@ def get_invoices():
     response = {
         'msg': f'Here are your invoices, {user.email}.',
         'invoices': processed_invoices
-    }
-    
+    }    
     return jsonify(response), 200
 
 
