@@ -15,6 +15,7 @@ api = Blueprint('api', __name__)
 # Allow CORS requests to this API
 CORS(api)
 
+
 @api.route('/token', methods=['POST'])
 def generate_token():
     email = request.json.get("email", None)
@@ -49,7 +50,6 @@ def register_user():
     email = email.lower()
     user = User.query.filter_by(email=email).first()
 
-    # try without None to show error
     if user is not None and user.email == email:
         response = {
             "msg": "User already exists."
@@ -59,7 +59,6 @@ def register_user():
     new_user = User()
     new_user.email = email
     new_user.password = password
-    # try without is_active first to show error
     new_user.is_active = True
     db.session.add(new_user)
     db.session.commit()
@@ -71,7 +70,7 @@ def register_user():
     return jsonify(response), 200
 
 
-@api.route('/private', methods=['GET'])
+@api.route('/invoice', methods=['GET'])
 @jwt_required()
 def get_invoices():
     # Access the identity of the current user with get_jwt_identity
@@ -81,12 +80,8 @@ def get_invoices():
     user = User.query.filter_by(id = user_id).first()
     user_invoices = Invoice.query.filter_by(user_id=user_id).all()
 
-    # this shows the invoice objects, but we need more processing
-    print("user_invoices: ", user_invoices)
-
     # we need to serialize the invoice objects and put them in an array
     processed_invoices = [each_invoice.serialize() for each_invoice in user_invoices]
-    print('processed invoices: ', processed_invoices)
 
     if user_invoices is None or len(user_invoices) == 0:
         response = {
