@@ -90,7 +90,8 @@ def get_invoices():
 
     if user_invoices is None or len(user_invoices) == 0:
         response = {
-            "msg": f"Hello {user.email}, you have no invoices."
+            "msg": f"Hello {user.email}, you have no invoices.",
+            'invoices': processed_invoices
         }   
         return jsonify(response), 200
     
