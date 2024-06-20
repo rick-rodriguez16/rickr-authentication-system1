@@ -102,7 +102,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			getInvoices: async() => {
 				const store = getStore()
-				console.log(store)
 				const options = {
 					method: 'GET',
 					mode: 'cors',
@@ -128,7 +127,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 					invoices: data.invoices,
 					invoiceMessage: data.msg
 				})
-				console.log(data.msg, data.invoices)
 				return data;
 			}
 		}

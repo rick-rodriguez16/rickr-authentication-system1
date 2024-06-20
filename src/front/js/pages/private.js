@@ -1,4 +1,5 @@
 import React, { useContext, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { Context } from '../store/appContext';
 import { Invoice } from '../component/invoice';
     
@@ -35,9 +36,11 @@ export const Private = () => {
                     </tbody>
                 </table>
             </div>
-            <button
-                onClick={() => {actions.logout()}}
-            >Logout</button>
+            <Link to='/login'>
+                <button
+                    onClick={() => {actions.logout()}}
+                >Logout</button>
+            </Link>
         </>
     );
 }
