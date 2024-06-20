@@ -27,7 +27,7 @@ def generate_token():
 
     if user is None:
         response = {
-            "msg": "User or Password does not match."
+            "msg": "Email or Password does not match."
         }
         return jsonify(response), 401
     
@@ -35,7 +35,7 @@ def generate_token():
     response = {
         "access_token": access_token,
         "user_id": user.id,
-        "msg": f"Welcome {user.email}! Please log in."
+        "msg": f"Welcome {user.email}!"
     }
 
     return jsonify(response), 200
@@ -64,13 +64,13 @@ def register_user():
     db.session.commit()
 
     response = {
-        "msg": f"Awesome {new_user.email}! You successfully signed up!"
+        "msg": f"Awesome {new_user.email}! You have successfully signed up!"
     }
 
     return jsonify(response), 200
 
 
-@api.route('/invoice', methods=['GET'])
+@api.route('/invoices', methods=['GET'])
 @jwt_required()
 def get_invoices():
     # access the user_id of the current user with the access_token

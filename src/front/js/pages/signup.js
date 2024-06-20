@@ -8,17 +8,25 @@
 // FAILURE means:
 // 1. Response will return a msg stored in flux store
 // 2. msg will be displayed on signup page telling the user that the email already exists
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
+import { useNavigate } from "react-router-dom"
 import { Context } from '../store/appContext';
 
-export const Signup = () => {
-    const [email, setEmail] = useState("")
-    const [password, setPassword] = useState("")
-    const {store, actions} = useContext(Context)
+export const SignUp = () => {
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const navigate = useNavigate();
+    const {store, actions} = useContext(Context);
 
     const handleClick = () => {
-        actions.signUp(email, password);
+        actions.signUp(email, password)
     }
+
+    useEffect(() => {
+        if(store.isSignUpSuccessful) {
+            navigate("/login")
+        }
+    }, [store.isSignUpSuccessful])
 
     return (
         <>
@@ -26,36 +34,31 @@ export const Signup = () => {
                 <div>
                     <h1>Sign Up</h1>
                 </div>
-                {/* pause here to set up in layout.js */}
                 <div>
-                    {store.message  || ""}
+                    {store.signupMessage || ""}
                 </div>
                 <div>
                     <input 
-                        type="email" 
-                        placeholder="Enter email" 
-                        size="30"
+                        type="email"
+                        placeholder="Enter email"
                         value={email}
                         onChange={e => setEmail(e.target.value)}
                         required
                     />
                     <input 
-                        type="password" 
+                        type="password"
                         placeholder="Enter password"
-                        minLength="6"
                         value={password}
                         onChange={e => setPassword(e.target.value)}
-                        required 
+                        required
                     />
                 </div>
                 <div>
                     <button
-                        onClick={() => {handleClick()}}
+                        onClick={handleClick}
                     >Sign Up</button>
-                </div>                
-            </div>            
+                </div>
+            </div>
         </>
     );
 }
-
-
